@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Painel do Professor{% endblock %}
+{% block content %}
+<h2 class="text-center text-primary mb-4">Gerador de Testes Matemáticos</h2>
+<form action="/gerar" method="POST" class="d-flex flex-column gap-3">
+    <div>
+        <label class="form-label fw-bold">Escolha a Disciplina do Teste:</label>
+        <select name="materia" class="form-select">
+            <option value="1">Aritmética (Multiplicação e Divisão com Vírgula)</option>
+            <option value="2">Funções (Início de Função de 1º Grau)</option>
+            <option value="3">Funções Quadráticas (2º Grau / Exponenciais)</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg mt-2">Gerar e Exibir Prova</button>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+<h3 class="text-center text-success mb-3">{{ titulo }}</h3>
+
+<form action="/corrigir" method="POST" class="d-flex flex-column gap-4">
+    <input type="hidden" name="id_teste" value="{{ id_teste }}">
+    
+    <div class="p-3 bg-light border rounded">
+        <label class="form-label fw-bold">Nome do Aluno:</label>
+        <input type="text" name="nome_aluno" required class="form-control" placeholder="Digite seu nome completo">
+    </div>
+
+    {% for q in questoes %}
+    {% set pergunta_idx = loop.index0 %}
+    <div class="p-3 border rounded bg-white">
+        <p class="fw-bold mb-3">{{ loop.index }}. {{ q.pergunta }}</p>
+        <div class="d-flex flex-column gap-2">
+            {% for opcao in q.opcoes %}
+            <label class="border p-2 rounded d-flex align-items-center gap-3 style-label" style="cursor: pointer;">
+                <input type="radio" name="q{{ pergunta_idx }}" value="{{ opcao }}" required class="form-check-input m-0">
+                <span>{{ opcao }}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success btn-lg mt-2">Finalizar e Enviar Teste</button>
+</form>
+{% endblock %}

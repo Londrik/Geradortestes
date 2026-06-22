@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Resultado do Teste{% endblock %}
+{% block content %}
+<h2 class="text-center mb-4">Resumo do Envio</h2>
+<div class="text-center d-flex flex-column align-items-center gap-3">
+    <p class="fs-4">Obrigado por responder, <span class="fw-bold text-dark">{{ nome }}</span>!</p>
+    
+    <div class="p-4 rounded-circle bg-opacity-10 d-flex justify-content-center align-items-center {% if acertos >= 7 %}bg-success text-success{% else %}bg-warning text-warning{% endif %}" style="width: 120px; height: 120px;">
+        <span class="fs-2 fw-bold">{{ acertos }}/{{ total }}</span>
+    </div>
+    
+    <p class="fs-5">As respostas foram computadas e guardadas com sucesso no banco de dados.</p>
+    <a href="/" class="btn btn-outline-secondary mt-3">Voltar ao Início</a>
+</div>
+{% endblock %}
