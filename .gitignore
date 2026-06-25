@@ -1,19 +1,5 @@
-# Ambientes Virtuais
-.venv/
-venv/
-ENV/
-env/
-
-# Cache do Python
-**/__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Configurações do VS Code ou IDEs
-.vscode/
-.idea/
-
-# Arquivos do sistema operacional
-Thumbs.db
-.DS_Store
+"Dockerfile" 
+"docker-compose.yml" 
+"__pycache__/" 
+"*.pyc" 
+".env" 
