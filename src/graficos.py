@@ -25,7 +25,6 @@ def gerar_grafico_base64_2grau(a, b, c):
     return img_base64
 
 def formatar_vertice(x, y):
-    # Arredonda para no máximo 2 casas decimais para sumir com as dízimas longas
     x_formatado = round(x, 2) if not x.is_integer() else int(x)
     y_formatado = round(y, 2) if not y.is_integer() else int(y)
     return f"V({x_formatado}, {y_formatado})"
@@ -40,9 +39,9 @@ def gerar_questao_2grau_grafico():
     
     imagem = gerar_grafico_base64_2grau(a, b, c)
     
-    enunciado = "O gráfico abaixo representa uma função quadrática f(x) = ax² + bx + c. Analisando a parábola, determine as coordenadas do seu vértice V(xv, yv)."
+    # ENUNCIADO CIENTÍFICO: Inclui a definição formal do Vértice com Delta
+    enunciado = f"Dada a função quadrática f(x) = ax² + bx + c, cujo vértice é definido cientificamente por V(xv, yv) = (-b/2a, -Δ/4a) onde Δ = b² - 4ac, analise a parábola gerada abaixo e determine as coordenadas exatas do seu ponto de inflexão V."
     
-    # Usa o formatador para deixar as alternativas limpas
     correta = formatar_vertice(xv, yv)
     alternativas = [
         correta,
@@ -50,7 +49,6 @@ def gerar_questao_2grau_grafico():
         formatar_vertice(xv, yv - 2),
         formatar_vertice(-xv, -yv)
     ]
-    # Remove duplicatas se houverem antes de embaralhar
     alternativas = list(set(alternativas))
     while len(alternativas) < 4:
         alternativas.append(formatar_vertice(xv + random.randint(2, 5), yv + random.randint(2, 5)))
@@ -84,7 +82,8 @@ def gerar_questao_1grau_grafico():
     imagem = base64.b64encode(buf.read()).decode('utf-8')
     plt.close()
     
-    enunciado = "Determine o coeficiente linear (interseção com o eixo y) da reta representada no gráfico abaixo:"
+    # ENUNCIADO CIENTÍFICO: Fórmula geral da taxa de variação/coeficiente linear
+    enunciado = f"Considerando a equação da reta f(x) = ax + b, onde 'a' representa a declividade (Δy/Δx) e 'b' representa a ordenada na origem f(0), determine o valor do coeficiente linear com base no gráfico interceptado:"
     correta = str(b)
     
     alternativas = [correta, str(b + 1), str(-b), str(a)]

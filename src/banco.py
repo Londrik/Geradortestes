@@ -6,7 +6,6 @@ def conectar():
 
 def criar_tabelas():
     conn, cursor = conectar()
-    # CORREÇÃO: Alterado 'NOT EXISTS' para 'NOT NULL' na sintaxe do SQL
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS gabaritos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,9 +20,15 @@ def criar_tabelas():
 
 def salvar_gabarito(materia, dificuldade, respostas_chave):
     conn, cursor = conectar()
-    comando = "INSERT INTO gabaritos (materia, dificuldade, respostas) VALUES (?, ?, ?)"
-    cursor.execute(comando, (materia, dificuldade, respostas_chave))
+    cursor.execute("INSERT INTO gabaritos (materia, dificuldade, respostas) VALUES (?, ?, ?)", (materia, dificuldade, respostas_chave))
     id_teste = cursor.lastrowid
     conn.commit()
     conn.close()
     return id_teste
+
+def buscar_gabarito(id_teste):
+    conn, cursor = conectar()
+    cursor.execute("SELECT respostas FROM gabaritos WHERE id = ?", (id_teste,))
+    resultado = cursor.fetchone()
+    conn.close()
+    return resultado[0] if resultado else None

@@ -1,5 +1,13 @@
-"Dockerfile" 
-"docker-compose.yml" 
-"__pycache__/" 
-"*.pyc" 
-".env" 
+﻿# Ambientes Virtuais (Venv)
+.venv/
+venv/
+env/
+
+# Banco de dados local
+*.db
+*.sqlite3
+
+# Caches do Python e Matplotlib
+__pycache__/
+*.pyc
+.pytest_cache/

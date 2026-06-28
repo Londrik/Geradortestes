@@ -11,6 +11,8 @@
         .grafico img { max-width: 100%; height: auto; margin: 15px 0; border: 1px solid #ccc; border-radius: 4px; }
         .alternativas { margin-top: 12px; }
         .alternativa-item { display: block; margin-bottom: 10px; cursor: pointer; }
+        .btn-enviar { background-color: #004b87; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
+        .btn-enviar:hover { background-color: #003366; }
         .footer { margin-top: 50px; text-align: center; font-size: 0.9em; color: #666; }
     </style>
 </head>
@@ -20,8 +22,11 @@
         <p><strong>Código do Teste:</strong> #{{ id_teste }}</p>
         <hr>
         
-        <form>
+        <form action="/corrigir" method="POST">
+            <input type="hidden" name="id_teste" value="{{ id_teste }}">
+
             {% for questao in questoes %}
+                {% set id_da_questao = loop.index0 %}
                 <div class="questao">
                     <h3>Questão {{ loop.index }}</h3>
                     <p>{{ questao.enunciado }}</p>
@@ -35,13 +40,15 @@
                     <div class="alternativas">
                         {% for alternativa in questao.alternativas %}
                             <label class="alternativa-item">
-                                <input type="radio" name="questao_{{ loop.index0 }}" value="{{ alternativa }}">
+                                <input type="radio" name="questao_{{ id_da_questao }}" value="{{ alternativa }}" required>
                                 {{ alternativa }}
                             </label>
                         {% endfor %}
                     </div>
                 </div>
             {% endfor %}
+
+            <button type="submit" class="btn-enviar">Finalizar e Enviar Respostas</button>
         </form>
 
         <div class="footer">
