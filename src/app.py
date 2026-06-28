@@ -17,7 +17,6 @@ def remover_acentos(texto):
 def index():
     return render_template("index.html")
 
-
 @app.route("/gerar", methods=["POST"])
 def gerar():
     materia_opcao = request.form.get("materia")
@@ -31,6 +30,10 @@ def gerar():
     if materia_opcao == "conjuntos":
         titulo = "Conjuntos Numéricos e Intervalos"
         questoes = matematica.modulo_conjuntos(dificuldade=dificuldade)
+
+    elif materia_opcao == "aritmetica":
+        titulo = "Aritmética e Teoria dos Números"
+        questoes = matematica.modulo_aritmetica(dificuldade=dificuldade)
 
     elif materia_opcao == "funcao_afim":
         titulo = "Função de 1º Grau (Afim)"
@@ -51,7 +54,6 @@ def gerar():
     if not questoes:
         return redirect("/")
 
-    # CORREÇÃO CRÍTICA: Respostas separadas por pipe '|' para não quebrar com a vírgula dos vértices ex: V(1, 2)
     respostas_chave = "|".join([q["correta"] for q in questoes])
     id_teste = banco.salvar_gabarito(titulo, dificuldade_bruta, respostas_chave)
 
@@ -59,7 +61,6 @@ def gerar():
         "teste.html", titulo=titulo, questoes=questoes, id_teste=id_teste
     )
 
-# NOVA ROTA: Processa a correção e retorna o resultado para o usuário
 @app.route("/corrigir", methods=["POST"])
 def corrigir():
     id_teste = request.form.get("id_teste")
@@ -87,7 +88,6 @@ def corrigir():
         <a href="/" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #004b87; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Voltar ao Início</a>
     </div>
     """
-
 
 if __name__ == "__main__":
     app.run(debug=True)
