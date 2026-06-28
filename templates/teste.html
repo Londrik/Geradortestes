@@ -21,7 +21,7 @@
         <h1>{{ titulo }}</h1>
         <p><strong>Código do Teste:</strong> #{{ id_teste }}</p>
         <hr>
-        
+         
         <form action="/corrigir" method="POST">
             <input type="hidden" name="id_teste" value="{{ id_teste }}">
 
@@ -30,13 +30,13 @@
                 <div class="questao">
                     <h3>Questão {{ loop.index }}</h3>
                     <p>{{ questao.enunciado }}</p>
-                    
-                    {% if questao.imagem_base64 %}
+                     
+                    {% if questao.imagem %}
                         <div class="grafico">
-                            <img src="data:image/png;base64,{{ questao.imagem_base64 }}" alt="Gráfico da Questão">
+                            <img src="{{ questao.imagem }}" alt="Gráfico da Questão">
                         </div>
                     {% endif %}
-                    
+                     
                     <div class="alternativas">
                         {% for alternativa in questao.alternativas %}
                             <label class="alternativa-item">
