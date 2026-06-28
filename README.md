@@ -10,19 +10,28 @@ Sistema automatizado para geracao de cadernos de testes dinamicos de Matematica 
 * Renderizacao Grafica: Matplotlib (configurada com o backend Agg para gerar graficos de Cinematica em background de forma assincrona, convertendo-os em strings Base64 injetadas direto no HTML).
 
 ## Arquitetura do Projeto
-O projeto segue um erro padrao modular focado em separacao de responsabilidades (Clean Architecture):
+O projeto segue um padrao modular focado em separacao de responsabilidades (Clean Architecture):
 
-- .venv/ (Ambiente virtual isolado)
-- templates/index.html (Frontend Bootstrap 5 + Selecao dinamica)
-- src/app.py (Controlador principal - Rotas Flask /gerar e /corrigir)
-- src/banco.py (Camada de Persistencia - Conexao e Tabelas SQLite)
-- src/matematica.py (Modulo gerador de questoes algebricas)
-- src/graficos_fisica.py (Motor grafico - Matplotlib para Base64)
-- src/fisica/ (Modulo de Fisica totalmente componentizado)
-- .gitignore (Protecao para nao subir arquivos locais e lixo)
-- requirements.txt (Dependencias do projeto)
+`	ext
+gerador-testes-matematica/
+├── .venv/                   # Ambiente virtual isolado
+├── templates/
+│   └── index.html           # Frontend (Bootstrap 5 + Seleção dinâmica)
+├── src/
+│   ├── app.py               # Controlador principal (Rotas Flask /gerar e /corrigir)
+│   ├── banco.py             # Camada de Persistência (Conexão e Tabelas SQLite)
+│   ├── matematica.py        # Módulo gerador de questões algébricas
+│   ├── graficos_fisica.py   # Motor gráfico (Matplotlib -> Base64)
+│   └── fisica/              # Módulo de Física totalmente componentizado
+│       ├── __init__.py      # Inicializador do pacote de física
+│       ├── cinematica.py    # Gerador de MRU com gráficos acoplados
+│       ├── vetores.py       # Questões vetoriais textuais
+│       └── ... (dinamica, energia, etc.)
+├── .gitignore               # Proteção para não subir arquivos locais/lixo
+└── requirements.txt         # Dependências do projeto (Flask, Matplotlib)
+`",
+",
 
-## Como Executar o Ambiente Local
 
 1. Ative o ambiente virtual no terminal:
    .venv\Scripts\activate
