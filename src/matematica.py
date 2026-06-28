@@ -1,4 +1,4 @@
-import random
+import random  # CORREÇÃO: Adicionado o import que faltava
 
 
 def formata_br(numero):
@@ -6,32 +6,49 @@ def formata_br(numero):
 
 
 def gerar_opcoes(correta, tipo="int"):
+    erros = set()  # Usando set para evitar alternativas duplicadas automaticamente
+
     if tipo == "dec":
-        erros = {
+        # Opções baseadas em erros comuns
+        potenciais = [
             correta + 1.5,
             correta - 1.5,
             correta + 0.5,
             correta - 0.5,
             correta * 2,
-        }
-        erros = [e for e in erros if e > 0 and round(e, 2) != round(correta, 2)]
+        ]
+        for e in potenciais:
+            if e > 0 and round(e, 2) != round(correta, 2):
+                erros.add(formata_br(e))
+
+        # Se não encheu as 3 opções, gera valores aleatórios incrementais
         while len(erros) < 3:
-            erros.append(correta + random.choice([0.1, 0.5, 1.2]))
-        return [formata_br(e) for e in random.sample(erros, 3)]
+            novo_erro = correta + random.choice([0.1, 0.5, 1.2, 2.5])
+            if round(novo_erro, 2) != round(correta, 2) and novo_erro > 0:
+                erros.add(formata_br(novo_erro))
+
+        return list(erros)[:3]
+
     else:
-        # Força os erros a serem inteiros convertidos para string
         correta_int = int(correta)
-        erros = {
+        potenciais = [
             correta_int + 2,
             correta_int - 2,
             correta_int + 5,
             correta_int - 3,
             correta_int * 2,
-        }
-        erros = [e for e in erros if e != correta_int]
+        ]
+        for e in potenciais:
+            if e != correta_int and e > 0:
+                erros.add(str(e))
+
+        # CORREÇÃO: Garante o preenchimento sem duplicar e sem loop infinito
         while len(erros) < 3:
-            erros.append(correta_int + random.randint(3, 10))
-        return [str(e) for e in random.sample(erros, 3)]
+            novo_erro = correta_int + random.randint(3, 15)
+            if novo_erro != correta_int and novo_erro > 0:
+                erros.add(str(novo_erro))
+
+        return list(erros)[:3]
 
 
 def definir_limites(dificuldade):
@@ -102,7 +119,12 @@ def modulo_conjuntos(dificuldade="intermediario"):
             correta = a
             erros = {random.randint(a + 1, b), b, a + 2}
 
-        opcoes = [str(correta)] + [str(e) for e in random.sample(list(erros), 3)]
+        # CORREÇÃO: Remove a possibilidade do elemento correto ser sorteado como erro acidentalmente
+        erros_filtrados = [str(e) for e in erros if e != correta]
+        while len(erros_filtrados) < 3:
+            erros_filtrados.append(str(b + random.randint(6, 12)))
+
+        opcoes = [str(correta)] + random.sample(erros_filtrados, 3)
         random.shuffle(opcoes)
         questoes.append(
             {"enunciado": pergunta, "correta": str(correta), "alternativas": opcoes}
@@ -113,7 +135,8 @@ def modulo_conjuntos(dificuldade="intermediario"):
 # ==================== FUNÇÕES (1º E 2º GRAU) ====================
 
 
-def modulo_funcoes(dificuldade="intermediario"):
+# CORREÇÃO: Renomeado de modulo_funcoes para modulo_funcao_afim para sincronizar com seu app.py
+def modulo_funcao_afim(dificuldade="intermediario"):
     questoes = []
     min_val, max_val = definir_limites(dificuldade)
 
@@ -132,10 +155,9 @@ def modulo_funcoes(dificuldade="intermediario"):
         )
 
     for _ in range(5):
-        a, b = (
-            random.randint(min_val + i, max_val),
-            random.randint(1, max_val * 2) if (i := 1) else 1,
-        )
+        a = random.randint(min_val + 1, max_val)
+        b = random.randint(1, max_val * 2)
+
         if random.choice([True, False]):
             pergunta = (
                 f"Na função f(x) = {a}x + {b}, identifique o Coeficiente Angular (a):"
@@ -159,11 +181,9 @@ def modulo_quadratica(dificuldade="intermediario"):
     min_val, max_val = definir_limites(dificuldade)
 
     for _ in range(5):
-        a, b, c = (
-            random.randint(1, max(2, min_val)),
-            random.randint(1, max_val),
-            random.randint(1, max_val),
-        )
+        a = random.randint(1, max(2, min_val))
+        b = random.randint(1, max_val)
+        c = random.randint(1, max_val)
         x = random.randint(1, 4)
         correta = (a * (x**2)) + (b * x) + c
         opcoes = [str(correta)] + gerar_opcoes(correta, "int")
@@ -177,11 +197,9 @@ def modulo_quadratica(dificuldade="intermediario"):
         )
 
     for _ in range(5):
-        a, b, c = (
-            random.randint(1, max_val),
-            random.randint(1, max_val),
-            random.randint(1, max_val),
-        )
+        a = random.randint(1, max_val)
+        b = random.randint(1, max_val)
+        c = random.randint(1, max_val)
         pergunta = f"Na função f(x) = {a}x² + {b}x + {c}, qual é o coeficiente do termo quadrático (a)?"
         opcoes = [str(a)] + gerar_opcoes(a, "int")
         random.shuffle(opcoes)
@@ -201,11 +219,9 @@ def modulo_inequacoes(dificuldade="intermediario"):
     for i in range(10):
         a = random.randint(2, max_val)
         b = random.randint(min_val, max_val * 2)
-        # Garante divisão exata para simplificar as alternativas
         c = a * random.randint(1, 5)
 
         if i % 2 == 0:
-            # ex: ax - b > c -> ax > c + b
             correta_val = (c + b) // a
             pergunta = f"Resolva a inequação linear: {a}x - {b} > {c}"
             correta = f"x > {correta_val}"
@@ -271,7 +287,7 @@ def modulo_financeira(dificuldade="intermediario"):
 
     for _ in range(10):
         porcentagem = random.choice([10, 20, 25, 50, 15, 30])
-        if "dificil" in d if (d := dificuldade.lower()) else False:
+        if "dificil" in dificuldade.lower():
             porcentagem = random.choice([7, 13, 21, 35])
 
         total_dinheiro = random.randint(min_val * 10, max_val * 20)
@@ -293,7 +309,6 @@ def modulo_financeira(dificuldade="intermediario"):
 def modulo_trigonometria(dificuldade="intermediario"):
     questoes = []
 
-    # Relações Teóricas e numéricas básicas (10 questões fixas randômicas)
     banco_trig = [
         {
             "enunciado": "Em um triângulo retângulo, qual a razão do Cateto Oposto pela Hipotenusa?",
@@ -352,7 +367,6 @@ def modulo_trigonometria(dificuldade="intermediario"):
         },
     ]
 
-    # Se for Difícil/Avançado, escala os valores do triângulo de Pitágoras
     if "dificil" in dificuldade.lower() or "avancado" in dificuldade.lower():
         banco_trig[8] = {
             "enunciado": "Em um triângulo retângulo, se os catetos medem 6 e 8, quanto mede a hipotenusa?",
@@ -361,4 +375,3 @@ def modulo_trigonometria(dificuldade="intermediario"):
         }
 
     return random.sample(banco_trig, 10)
-

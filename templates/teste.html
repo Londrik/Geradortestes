@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #004b87; }
+        .questao { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #ddd; }
+        .grafico img { max-width: 100%; height: auto; margin: 15px 0; border: 1px solid #ccc; border-radius: 4px; }
+        .alternativas { margin-top: 12px; }
+        .alternativa-item { display: block; margin-bottom: 10px; cursor: pointer; }
+        .footer { margin-top: 50px; text-align: center; font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ titulo }}</h1>
+        <p><strong>Código do Teste:</strong> #{{ id_teste }}</p>
+        <hr>
+        
+        <form>
+            {% for questao in questoes %}
+                <div class="questao">
+                    <h3>Questão {{ loop.index }}</h3>
+                    <p>{{ questao.enunciado }}</p>
+                    
+                    {% if questao.imagem_base64 %}
+                        <div class="grafico">
+                            <img src="data:image/png;base64,{{ questao.imagem_base64 }}" alt="Gráfico da Questão">
+                        </div>
+                    {% endif %}
+                    
+                    <div class="alternativas">
+                        {% for alternativa in questao.alternativas %}
+                            <label class="alternativa-item">
+                                <input type="radio" name="questao_{{ loop.index0 }}" value="{{ alternativa }}">
+                                {{ alternativa }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </form>
+
+        <div class="footer">
+            SENAI Gama • Desenvolvimento de Sistemas
+        </div>
+    </div>
+</body>
+</html>
